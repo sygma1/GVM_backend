@@ -4,11 +4,6 @@ const Ticket = require('../models/Ticket');
 const { requireAuth, requireRole } = require('../middleware/auth');
 const { createHiveCase } = require('../services/hiveService');
 
-const sanitizeHtml = require('sanitize-html');
-const cleanDescription = sanitizeHtml(req.body.description, {
-  allowedTags: [],
-  allowedAttributes: {}
-});
 
 
 // Get all tickets (Manager sees all, Analyst sees assigned)
@@ -24,6 +19,12 @@ router.get('/', requireAuth, async (req, res) => {
 // Create ticket (Manager only)
 router.post('/', requireRole('manager'), async (req, res) => {
   try {
+    const sanitizeHtml = require('sanitize-html');
+    const cleanDescription = sanitizeHtml(req.body.description, {
+      allowedTags: [],
+      allowedAttributes: {}
+    });
+    
     const ticket = new Ticket({ ...req.body, description: cleanDescription, createdBy: req.user._id });
     
     // Create TheHive case
