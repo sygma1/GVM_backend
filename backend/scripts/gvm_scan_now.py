@@ -46,7 +46,8 @@ def start_scan_now(args):
         connection = TLSConnection(
             hostname=args.gvm_host,
             port=args.gvm_port,
-            certfile='./gvm-certs/stunnel.pem'
+            #certfile='./gvm-certs/stunnel.pem'
+            ssl_verify=False
         )
         debug_print("TLS STATUS", "TLS connection established successfully")
 
